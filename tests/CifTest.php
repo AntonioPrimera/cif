@@ -26,3 +26,10 @@ it('can instantiate a Cif using the helper function', function () {
     expect(cif('RO46801317'))->toBeInstanceOf(Cif::class)
         ->and(cif('RO46801317')->is(Cif::from('RO46801317')))->toBeTrue();
 });
+
+it('will eliminate some clear non-valid Cifs, even for unknown countries', function () {
+    expect(cif('ABCDEF')->isValid())->toBeFalse()
+        ->and(cif('12345678901234567890')->isValid())->toBeFalse()
+        ->and(cif('J40/1234/1990')->isValid())->toBeFalse()
+        ->and(cif('RO-42009129')->isValid())->toBeFalse();
+});

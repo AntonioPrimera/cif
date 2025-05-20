@@ -13,12 +13,32 @@ class CifValidator
 
         $validationMethod = 'isValid' . strtoupper($countryCode);
         if (!method_exists(static::class, $validationMethod))
-            throw new \InvalidArgumentException("Validation method for country code [$countryCode] does not exist.");
+            return static::isLikelyVatNumber($cif);
 
         return static::$validationMethod($cif->withoutCountryCode());
     }
 
     //--- Country-specific validation methods -------------------------------------------------------------------------
+
+    /**
+     * Validate a vat number, for which we don't have a specific validation method.
+     * This may return false positives or false negatives, but it is only a
+     * fallback method.
+     */
+    protected static function isLikelyVatNumber(Cif $vatNumber): bool
+    {
+        $wcc = $vatNumber->withoutCountryCode();
+
+        // max length 13
+        if (strlen($wcc) > 13)
+            return false;
+
+        // must only contain digits
+        if (!ctype_digit($wcc))
+            return false;
+
+        return true;
+    }
 
     protected static function isValidRO(string $vatNumber): bool
     {
