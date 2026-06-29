@@ -18,6 +18,9 @@
     "require": {
         "php": "^8.4"
     },
+    "suggest": {
+        "ext-curl": "Needed for online VAT registry lookups (ANAF/VIES) via the default CurlHttpClient; or inject your own HttpClient."
+    },
     "require-dev": {
         "nunomaduro/collision": "^8.1.1||^7.10.0",
         "pestphp/pest": "^3.0",
